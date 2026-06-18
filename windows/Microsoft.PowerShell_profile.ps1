@@ -10,6 +10,19 @@ Invoke-Expression (&starship init powershell)
 
 Import-Module -Name Terminal-Icons
 
+# --- CIS Hardening (CIS Windows / PowerShell STIG) ---
+# PS STIG: Cap history size and persist incrementally
+Set-PSReadLineOption -MaximumHistoryCount 1000
+Set-PSReadLineOption -HistorySaveStyle SaveIncrementally
+
+# PS STIG: Drop commands containing secrets from history
+Set-PSReadLineOption -AddToHistoryHandler {
+    param([string]$line)
+    $sensitive = 'password|passwd|token|secret|apikey|api_key|credential|connectionstring'
+    return ($line -notmatch $sensitive)
+}
+# --- End CIS Hardening ---
+
 Set-PSReadLineOption -PredictionSource HistoryAndPlugin
 Set-PSReadLineOption -PredictionViewStyle ListView
 Set-PSReadLineOption -EditMode Windows
