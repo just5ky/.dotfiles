@@ -1,239 +1,173 @@
 # dotfiles
-Personal customization files used on Windows and/or Linux experience.
+
+> Personal shell configuration for Windows and Linux — CIS-hardened, prompt-themed with [Starship](https://starship.rs) and [Oh My Posh](https://ohmyposh.dev).
 
 Inspired by [Xcad2k/dotfiles](https://github.com/xcad2k/dotfiles)
 
 ![Powershell](https://user-images.githubusercontent.com/71321862/160266439-51cae5bc-d843-490a-92d2-28a84e4d9ca9.png)
-
 ![Linux](https://user-images.githubusercontent.com/71321862/160266535-24ee625b-7571-4304-8e47-aa5654b30b15.png)
+
+---
+
+## Contents
+
+```
+.
+├── Linux/
+│   ├── .bashrc          # Bash — CIS-hardened shell init
+│   ├── .zshrc           # Zsh  — CIS-hardened shell init
+│   ├── .tcshrc          # Tcsh — CIS-hardened shell init
+│   └── startship.toml   # Starship prompt theme (Linux)
+└── windows/
+    ├── Microsoft.PowerShell_profile.ps1   # PowerShell profile — CIS-hardened
+    ├── starship.toml                      # Starship prompt theme (Windows)
+    └── hackthebox.omp.json                # Oh My Posh — HackTheBox theme
+```
+
+---
+
+## Security Hardening
+
+All shell configs are hardened against the **CIS Linux Benchmark §5.4** (Linux) and **PowerShell STIG** (Windows). Controls applied:
+
+| Control | Linux (bash/zsh/tcsh) | PowerShell |
+|---|---|---|
+| Session timeout | `TMOUT=900` (15 min, readonly) | — |
+| Default umask | `umask 027` | — |
+| History privacy | `HISTCONTROL=ignorespace:erasedups` / `setopt HIST_IGNORE_SPACE` | `AddToHistoryHandler` drops lines matching `password\|token\|secret\|…` |
+| History size cap | `HISTSIZE=1000` / `SAVEHIST=1000` | `MaximumHistoryCount 1000` |
+| History persistence | — | `HistorySaveStyle SaveIncrementally` |
+| PATH safety | Strips `.` and empty segments | — |
+
+> **Note:** `trim_at` in both Starship configs uses `.local` — replace with your actual domain if needed.
+
+---
+
+## Prerequisites
+
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal  
+  (configs use [JetBrains Mono Nerd Font](https://www.nerdfonts.com/font-downloads))
+
+---
 
 ## Installation
 
-### Prerequisites
+### Linux
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, here I am using [JetBrains Mono](https://www.nerdfonts.com/font-downloads)).
-
-
-### Optional: OhMyPosh
-
-    `winget install JanDeDobbeleer.OhMyPosh -s winget`
-
-### Step 1. Install Starship
-
-Select your operating system from the list below to view installation instructions:
-
-<details>
-<summary>Android</summary>
-
-Install Starship using any of the following package managers:
-
-| Repository | Instructions           |
-| ---------- | ---------------------- |
-| [Termux]   | `pkg install starship` |
-
-</details>
-
-<details>
-<summary>BSD</summary>
-
-Install Starship using any of the following package managers:
-
-| Distribution | Repository      | Instructions                      |
-| ------------ | --------------- | --------------------------------- |
-| **_Any_**    | **[crates.io]** | `cargo install starship --locked` |
-| FreeBSD      | [FreshPorts]    | `pkg install starship`            |
-| NetBSD       | [pkgsrc]        | `pkgin install starship`          |
-
-</details>
-
-<details>
-<summary>Linux</summary>
-
-Install the latest version for your system:
+**1. Install Starship**
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+<details>
+<summary>Package manager alternatives</summary>
 
-| Distribution       | Repository              | Instructions                                                  |
-| ------------------ | ----------------------- | ------------------------------------------------------------- |
-| **_Any_**          | **[crates.io]**         | `cargo install starship --locked`                             |
-| _Any_              | [conda-forge]           | `conda install -c conda-forge starship`                       |
-| _Any_              | [Linuxbrew]             | `brew install starship`                                       |
-| _Any_              | [Snapcraft]             | `snap install starship`                                       |
-| Alpine Linux 3.13+ | [Alpine Linux Packages] | `apk add starship`                                            |
-| Arch Linux         | [Arch Linux Community]  | `pacman -S starship`                                          |
-| CentOS 7+          | [Copr]                  | `dnf copr enable atim/starship` <br /> `dnf install starship` |
-| Fedora 31+         | [Fedora Packages]       | `dnf install starship`                                        |
-| NixOS              | [nixpkgs]               | `nix-env -iA nixos.starship`                                  |
-| Gentoo             | [Gentoo Packages]       | `emerge app-shells/starship`                                  |
-| Manjaro            |                         | `pacman -S starship`                                          |
-| NixOS              | [nixpkgs]               | `nix-env -iA nixpkgs.starship`                                |
-| Void Linux         | [Void Linux Packages]   | `xbps-install -S starship`                                    |
+| Distro | Command |
+|---|---|
+| Arch / Manjaro | `pacman -S starship` |
+| Fedora 31+ | `dnf install starship` |
+| Alpine 3.13+ | `apk add starship` |
+| NixOS | `nix-env -iA nixos.starship` |
+| Any (cargo) | `cargo install starship --locked` |
+| Any (snap) | `snap install starship` |
+| Any (brew) | `brew install starship` |
 
 </details>
 
-<details>
-<summary>macOS</summary>
-
-Install the latest version for your system:
+**2. Copy configs**
 
 ```sh
-curl -sS https://starship.rs/install.sh | sh
+# Shell init (pick yours)
+cp Linux/.bashrc ~/.bashrc
+cp Linux/.zshrc  ~/.zshrc
+cp Linux/.tcshrc ~/.tcshrc
+
+# Starship theme
+mkdir -p ~/.config
+cp Linux/startship.toml ~/.config/starship.toml
 ```
 
-Alternatively, install Starship using any of the following package managers:
-
-| Repository      | Instructions                            |
-| --------------- | --------------------------------------- |
-| **[crates.io]** | `cargo install starship --locked`       |
-| [conda-forge]   | `conda install -c conda-forge starship` |
-| [Homebrew]      | `brew install starship`                 |
-| [MacPorts]      | `port install starship`                 |
-
-</details>
-
-<details>
-<summary>Windows</summary>
-
-Install Starship using any of the following package managers:
-
-| Repository      | Instructions                            |
-| --------------- | --------------------------------------- |
-| **[crates.io]** | `cargo install starship --locked`       |
-| [Chocolatey]    | `choco install starship`                |
-| [conda-forge]   | `conda install -c conda-forge starship` |
-| [Scoop]         | `scoop install starship`                |
-
-</details>
-
-### Step 2. Setup your shell to use Starship
-
-Configure your shell to initialize starship. Select yours from the list below:
-
-<details>
-<summary>Bash</summary>
-
-Add the following to the end of `~/.bashrc`:
+**3. Reload your shell**
 
 ```sh
-eval "$(starship init bash)"
+source ~/.bashrc   # or ~/.zshrc / ~/.tcshrc
 ```
 
-</details>
+---
 
-<details>
-<summary>Cmd</summary>
+### Windows (PowerShell)
 
-You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd.
-Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
-
-```lua
-load(io.popen('starship init cmd'):read("*a"))()
-```
-
-</details>
-
-<details>
-<summary>Elvish</summary>
-
-Add the following to the end of `~/.elvish/rc.elv`:
-
-```sh
-eval (starship init elvish)
-```
-
-Note: Only Elvish v0.18+ is supported
-
-</details>
-
-<details>
-<summary>Fish</summary>
-
-Add the following to the end of `~/.config/fish/config.fish`:
-
-```fish
-starship init fish | source
-```
-
-</details>
-
-<details>
-<summary>Ion</summary>
-
-Add the following to the end of `~/.config/ion/initrc`:
-
-```sh
-eval $(starship init ion)
-```
-
-</details>
-
-<details>
-<summary>Nushell</summary>
-
-Run the following:
-
-```sh
-mkdir ~/.cache/starship
-starship init nu | save ~/.cache/starship/init.nu
-```
-
-And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
-
-```sh
-starship init nu | save ~/.cache/starship/init.nu
-source ~/.cache/starship/init.nu
-```
-
-Note: Only Nushell v0.60+ is supported
-
-</details>
-
-<details>
-<summary>PowerShell</summary>
-
-Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
+**1. Install Starship**
 
 ```powershell
-Invoke-Expression (&starship init powershell)
+winget install Starship.Starship
+# or
+choco install starship
+# or
+scoop install starship
 ```
 
-</details>
+**2. Install required PowerShell modules**
 
-<details>
-<summary>Tcsh</summary>
-
-Add the following to the end of `~/.tcshrc`:
-
-```sh
-eval `starship init tcsh`
+```powershell
+Install-Module -Name Terminal-Icons -Repository PSGallery -Force
 ```
 
-</details>
+**3. Copy configs**
 
-<details>
-<summary>Xonsh</summary>
+```powershell
+# PowerShell profile
+Copy-Item windows\Microsoft.PowerShell_profile.ps1 $PROFILE
 
-Add the following to the end of `~/.xonshrc`:
-
-```python
-execx($(starship init xonsh))
+# Starship theme
+New-Item -ItemType Directory -Force "$HOME\.starship"
+Copy-Item windows\starship.toml "$HOME\.starship\starship.toml"
 ```
 
-</details>
+**4. Reload profile**
 
-<details>
-<summary>Zsh</summary>
-
-Add the following to the end of `~/.zshrc`:
-
-```sh
-eval "$(starship init zsh)"
+```powershell
+. $PROFILE
 ```
 
-</details>
+---
 
-### Follow guilde from [Startship](https://starship.rs) if you're stuck somewhere
+### Optional: Oh My Posh (Windows)
+
+```powershell
+winget install JanDeDobbeleer.OhMyPosh -s winget
+```
+
+Copy the theme and uncomment the `oh-my-posh` line in the PowerShell profile:
+
+```powershell
+Copy-Item windows\hackthebox.omp.json "$env:LOCALAPPDATA\Programs\oh-my-posh\themes\hackthebox.omp.json"
+```
+
+Then in `Microsoft.PowerShell_profile.ps1`, uncomment:
+
+```powershell
+# oh-my-posh init pwsh --config '...\hackthebox.omp.json' | Invoke-Expression
+```
+
+---
+
+## Shell Support
+
+| Shell | Platform | Prompt |
+|---|---|---|
+| Bash | Linux | Starship |
+| Zsh | Linux | Starship |
+| Tcsh | Linux | Starship |
+| PowerShell | Windows | Starship / Oh My Posh |
+
+---
+
+## References
+
+- [Starship docs](https://starship.rs/config/)
+- [Oh My Posh docs](https://ohmyposh.dev/docs)
+- [CIS Linux Benchmark](https://www.cisecurity.org/benchmark/debian_linux)
+- [PSReadLine docs](https://learn.microsoft.com/en-us/powershell/module/psreadline/)
+- [Terminal-Icons](https://github.com/devblackops/Terminal-Icons)

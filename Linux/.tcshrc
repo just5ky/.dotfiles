@@ -1,3 +1,14 @@
 # ~/.tcshrc
 
+# --- CIS Hardening (CIS Linux Benchmark §5.4) ---
+# CIS 5.4.4: Restrict default file permissions
+umask 027
+
+# CIS 5.4.5: Auto-logout after 15 min inactivity
+set autologout = 15
+
+# CIS 5.4.3: Limit command history
+set history = 1000
+# --- End CIS Hardening ---
+
 eval `starship init tcsh`
