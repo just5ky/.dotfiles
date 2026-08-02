@@ -1,6 +1,6 @@
 # dotfiles
 
-> Personal shell configuration for Windows and Linux — CIS-hardened, prompt-themed with [Starship](https://starship.rs) and [Oh My Posh](https://ohmyposh.dev).
+> Personal shell configuration for Windows and Linux — CIS-hardened, prompt-themed with [Starship](https://starship.rs) and [Oh My Posh](https://ohmyposh.dev). Also backs up the full desktop config for an [Omarchy](https://omarchy.org/) install.
 
 Inspired by [Xcad2k/dotfiles](https://github.com/xcad2k/dotfiles)
 
@@ -16,8 +16,13 @@ Inspired by [Xcad2k/dotfiles](https://github.com/xcad2k/dotfiles)
 ├── Linux/
 │   ├── .bashrc          # Bash — CIS-hardened shell init
 │   ├── .zshrc           # Zsh  — CIS-hardened shell init
-│   ├── .tcshrc          # Tcsh — CIS-hardened shell init
+│   ├── .tcshrc           # Tcsh — CIS-hardened shell init
 │   └── startship.toml   # Starship prompt theme (Linux)
+├── omarchy/
+│   ├── .config/          # Mirror of ~/.config for every Omarchy-managed app
+│   ├── THEME              # Active theme name at backup time
+│   ├── install.sh         # Restores .config/ onto a fresh Omarchy install
+│   └── README.md          # Details + update instructions
 └── windows/
     ├── Microsoft.PowerShell_profile.ps1   # PowerShell profile — CIS-hardened
     ├── starship.toml                      # Starship prompt theme (Windows)
@@ -47,6 +52,16 @@ All shell configs are hardened against the **CIS Linux Benchmark §5.4** (Linux)
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal  
   (configs use [JetBrains Mono Nerd Font](https://www.nerdfonts.com/font-downloads))
+
+---
+
+## Omarchy (Full Desktop Backup)
+
+`omarchy/` mirrors `~/.config` for an [Omarchy](https://omarchy.org/) Linux
+install — Hyprland, Waybar, Walker, terminals, and every other app Omarchy
+templates into your config, plus custom hooks/themes. See
+[`omarchy/README.md`](omarchy/README.md) for restore and update steps
+(short version: `./omarchy/install.sh`).
 
 ---
 
