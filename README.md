@@ -58,10 +58,10 @@ All shell configs are hardened against the **CIS Linux Benchmark §5.4** (Linux)
 ## Omarchy (Full Desktop Backup)
 
 `omarchy/` mirrors `~/.config` for an [Omarchy](https://omarchy.org/) Linux
-install — Hyprland, Waybar, Walker, terminals, and every other app Omarchy
-templates into your config, plus custom hooks/themes. See
-[`omarchy/README.md`](omarchy/README.md) for restore and update steps
-(short version: `./omarchy/install.sh`).
+install — Hyprland, the Omarchy shell (bar/menu/notifications/OSD),
+terminals, and every other app Omarchy templates into your config, plus
+custom hooks/themes. See [`omarchy/README.md`](omarchy/README.md) for
+restore and update steps (short version: `./omarchy/install.sh`).
 
 ---
 

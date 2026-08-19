@@ -19,4 +19,4 @@ done
 echo
 echo "Done. Re-select your theme to relink current/background:"
 echo "  omarchy theme set \"$(cat "$(dirname "$src")/THEME")\""
-echo "Then restart affected services: omarchy restart waybar; omarchy restart walker"
+echo "Then restart the shell: omarchy restart shell"
